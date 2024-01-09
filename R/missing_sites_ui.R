@@ -2,11 +2,11 @@
 #'
 #' @description
 #' A user interface function that takes user input to obtain and verify sites
-#' sites that were sampled but videos were not recording, therefore, no images
-#' from said sites are available.
+#' that were sampled but videos were not recording, therefore, no images from
+#' said sites are available.
 #'
-#' @return A vector containing the sites where videos, and consequently, images
-#' were not recorded.
+#' @return A vector containing the sites where videos and, consequently, images
+#' were not recorded. This vector is assigned to the global environment.
 
 ################################################################################
 
@@ -24,7 +24,7 @@
 # Author: Sam McNeely
 # Contributors:
 # Date Created: 11/27/2023
-# Date Modified: 12/08/2023
+# Date Modified: 01/08/2023
 
 # Purpose:
 # The purpose of this script is to create a function, missing_sites_ui(), that

@@ -1,26 +1,27 @@
-#' fromjulian
+#' tojulian
 #'
 #' @description
-#' A function that takes a Julian date and a year as arguments and converts it
-#' into the date format MM/DD/YYYY.
+#' A function that takes a month, day, and year as arguments and converts it
+#' into a Julian date.
 #'
-#' @param jdate Julian date as three numbers: ###.
+#' @param month Month as two numbers: ##.
+#' @param day Day as one or two numbers: # or ##.
 #' @param year Year as four numbers: ####.
 #'
 #' @return The date in MM/DD/YYYY format converted from the Julian Date.
 #'
 #' @examples
-#' ## Pass a Julian date from a year that is NOT a leap year.
-#' fromjulian(jdate = 289, year = 2023)
+#' ## Pass a date from a year that is NOT a leap year.
+#' tojulian(month = 10, day = 14, year = 2023)
 #'
-#' ## Pass the same Julian date from a year that IS a leap year.
-#' fromjulian(jdate = 289, year = 2020)
+#' ## Pass the same date from a year that IS a leap year.
+#' tojulian(month = 10, day = 14, year = 2020)
 #'
-#' ## Now pass a Julian date from a year that is NOT a leap year and before to March 1.
-#' fromjulian(jdate = 43, year = 2021)
+#' ## Now pass a date from a year that is NOT a leap year and before to March 1.
+#' tojulian(month = 02, day = 05, year = 2021)
 #'
 #' ## Pass the same Julian date from a year that IS a leap year and before February 29.
-#' fromjulian(jdate = 43, year = 2016)
+#' tojulian(month = 02, day = 05, year = 2016)
 
 ################################################################################
 
@@ -28,18 +29,11 @@
 ### File Description ###
 ########################
 
-# Filename: fromjulian.R
+# Filename: tojulian.R
 # Author: Sam McNeely
 # Contributors:
-# Date Created: 01/07/2024
-# Date Modified: 01/07/2024
-
-# Purpose:
-# The purpose of this script is to define a function that converts a Julian date
-# into the MM/DD/YYYY format.
-
-# Place in the data collection process:
-# This function is meant to gather the sample collection date.
+# Date Created: 01/08/2024
+# Date Modified: 01/08/2024
 
 ################################################################################
 
@@ -52,12 +46,25 @@
 # Do NOT modify the function definitions. Simply run through the function to
 # create it (Ctrl + Enter).
 
-# * Create a function that converts Julian date into MM/DD/YYYY date format.
-# Name the function fromjulian()
-fromjulian <- function(jdate, year) {
+# * Create a function that outputs a Julian date based on the MM/DD/YYYY date
+# * format.
+# Name the function tojulian()
+tojulian <- function(month, day, year) {
 
   # * Create a calendar as a dataframe to assist in extracting the date from the
   # * Julian date.
+
+  # * If month and day are single digit numbers, add a 0 in front and convert it
+  # * to a string.
+  # Month
+  if(length(month) == 1) {
+    month <- paste0('0', month)
+  }
+
+  # Day
+  if(length(day) == 1) {
+    day <- paste0('0', day)
+  }
 
   # * Julian dates are dependent upon the year. If the year is a leap year
   # * (February is 29 days long, rather than 28), then the Julian date will be
@@ -68,24 +75,20 @@ fromjulian <- function(jdate, year) {
   # year and the Julian date needs to account for that.
   if(year %% 4 == 0) {
     leapyear()
-    day <- calendar$day_leap[jdate]
-    month <- calendar$num_leap[jdate]
-    sample_date <- paste0(month, '/', day, '/', year)
+    jdate <- calendar$jdate_leap[calendar$num_leap == month & calendar$day_leap == day]
 
   # If the year is not divisible by 4 with a remainder of 0, then the year is
   # NOT a leap year.
   } else {
     regyear()
-    day <- calendar$day_reg[jdate]
-    month <- calendar$num_reg[jdate]
-    sample_date <- paste0(month, '/', day, '/', year)
+    jdate <- calendar$jdate_reg[calendar$num_reg == month & calendar$day_reg == day]
   }
 
   # Remove calendar from the global environment.
   rm(calendar, envir = .GlobalEnv)
 
-  # Use assign() to assign sample_date to the global environment
-  assign(x = 'sample_date', value = sample_date, envir = .GlobalEnv)
+  # Use assign() to assign jdate to the global environment
+  assign(x = 'julian_date', value = jdate, envir = .GlobalEnv)
 }
 
 ################################################################################

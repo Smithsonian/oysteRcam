@@ -9,7 +9,7 @@ fromjulian(jdate, year)
 \arguments{
 \item{jdate}{Julian date as three numbers: ###.}
 
-\item{year}{Year as four numbers: YYYY.}
+\item{year}{Year as four numbers: ####.}
 }
 \value{
 The date in MM/DD/YYYY format converted from the Julian Date.
@@ -30,5 +30,4 @@ fromjulian(jdate = 43, year = 2021)
 
 ## Pass the same Julian date from a year that IS a leap year and before February 29.
 fromjulian(jdate = 43, year = 2016)
-
 }

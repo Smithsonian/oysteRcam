@@ -7,11 +7,11 @@
 missing_sites_ui()
 }
 \value{
-A vector containing the sites where videos, and consequently, images
-were not recorded.
+A vector containing the sites where videos and, consequently, images
+were not recorded. This vector is assigned to the global environment.
 }
 \description{
 A user interface function that takes user input to obtain and verify sites
-sites that were sampled but videos were not recording, therefore, no images
-from said sites are available.
+that were sampled but videos were not recording, therefore, no images from
+said sites are available.
 }
