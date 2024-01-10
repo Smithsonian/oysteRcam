@@ -234,7 +234,7 @@ sites_ui <- function() {
         stop_1.2 <- TRUE
 
         # Use assign() to assign sites to the global environment
-        assign(x = 'sites', value = sites, envir = .GlobalEnv)
+        assign(x = 's', value = sites, envir = .GlobalEnv)
 
         # If user input is incorrect (N), break the current while loop and
         # reprompt the user

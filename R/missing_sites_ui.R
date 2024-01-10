@@ -10,12 +10,6 @@
 
 ################################################################################
 
-##########################
-### missing_sites_ui() ###
-##########################
-
-################################################################################
-
 ########################
 ### File Description ###
 ########################
@@ -137,7 +131,7 @@ missing_sites_ui <- function() {
         stop_3 <- TRUE
 
         # Use assign() to assign missing_sites to the global environment
-        assign(x = 'missing_sites', value = missing_sites, envir = .GlobalEnv)
+        assign(x = 'ms', value = missing_sites, envir = .GlobalEnv)
 
         # If user input is incorrect (N), break the current while loop and
         # reprompt the user

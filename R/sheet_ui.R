@@ -21,16 +21,7 @@
 # Author: Sam McNeely
 # Contributors:
 # Date Created: 11/27/2023
-# Date Modified: 01/08/2024
-
-# Purpose:
-# The purpose of this script is to create the necessary variables based on user
-# inputs to be stored in a dataframe and then in a spreadsheet for scoring the
-# GoPro images.
-
-# Difference from PhotoRandomizer.R:
-# This script uses functions sampling_date_ui(), camside_ui(), sites_ui(), and
-# missing_sites_ui() to create the rest of the spreadsheet variables.
+# Date Modified: 01/10/2024
 
 # Place in the data collection process:
 # This R script is meant to be run after images have been extracted from the
@@ -150,17 +141,17 @@ sheet_ui <- function() {
     # create an if-statement for if side equals "A" or "B" to define the variable
     # names
     if(side == "A") {
-      Date_a <- rep(date, length(sites))
-      Location_a <- rep(water_body, length(sites))
-      Site_a <- sites
-      Random_Assignment_a <- sample(1:length(sites), length(sites))
-      Notes_a <- rep("", length(sites))
+      Date_a <- rep(date, length(s))
+      Location_a <- rep(water_body, length(s))
+      Site_a <- s
+      Random_Assignment_a <- sample(1:length(s), length(s))
+      Notes_a <- rep("", length(s))
     } else if(side == "B") {
-      Date_b <- rep(date, length(sites))
-      Location_b <- rep(water_body, length(sites))
-      Site_b <- sites
-      Random_Assignment_b <- sample(1:length(sites), length(sites))
-      Notes_b <- rep("", length(sites))
+      Date_b <- rep(date, length(s))
+      Location_b <- rep(water_body, length(s))
+      Site_b <- s
+      Random_Assignment_b <- sample(1:length(s), length(s))
+      Notes_b <- rep("", length(s))
     }
 
     # * Determine if Habitat Score should be added to the datasheet
@@ -172,11 +163,11 @@ sheet_ui <- function() {
 
         # if side == "A", define Habscore_a as an empty vector
         if(side == "A") {
-          Habscore_a <- rep(NA, length(sites))
+          Habscore_a <- rep(NA, length(s))
 
           # if side == "B", define Habscore_b as an empty vector
         } else if(side == "B") {
-          Habscore_b <- rep(NA, length(sites))
+          Habscore_b <- rep(NA, length(s))
         }
       } # If hab_answer = "N", nothing needs to be done
 
@@ -212,11 +203,11 @@ sheet_ui <- function() {
 
           # if side == "A", define Habscore_a as an empty vector
           if(side == "A") {
-            Habscore_a <- rep(NA, length(sites))
+            Habscore_a <- rep(NA, length(s))
 
             # if side == "B", define Habscore_b as an empty vector
           } else if(side == "B") {
-            Habscore_b <- rep(NA, length(sites))
+            Habscore_b <- rep(NA, length(s))
           }
 
           # if the entry is not "Y" nor "N", then print an error message and
@@ -236,11 +227,11 @@ sheet_ui <- function() {
 
         # if side == "A", define Percent_Cover_a as an empty vector
         if(side == "A") {
-          Percent_Cover_a <- rep(NA, length(sites))
+          Percent_Cover_a <- rep(NA, length(s))
 
           # if side == "B", define Percent_Cover_b as an empty vector
         } else if(side == "B") {
-          Percent_Cover_b <- rep(NA, length(sites))
+          Percent_Cover_b <- rep(NA, length(s))
         }
       } # If pc_answer = "N", nothing needs to be done
 
@@ -276,11 +267,11 @@ sheet_ui <- function() {
 
           # if side == "A", define Percent_Cover_a as an empty vector
           if(side == "A") {
-            Percent_Cover_a <- rep(NA, length(sites))
+            Percent_Cover_a <- rep(NA, length(s))
 
             # If side == "B", define Percent_Cover_b as an empty vector
           } else if(side == "B") {
-            Percent_Cover_b <- rep(NA, length(sites))
+            Percent_Cover_b <- rep(NA, length(s))
           }
 
           # if the entry is not "Y" nor "N", then print an error message and
@@ -354,14 +345,14 @@ sheet_ui <- function() {
     missing_sites_ui() # the vector needed for the next step is missing_sites
 
     # append the dataframe with rows for missing images
-    if(length(missing_sites) >= 1) {
+    if(length(ms) >= 1) {
 
       # append the correct dataframe: df_a or df_b
       if(side == "A") {
-        for(i in 1:length(missing_sites)) {
+        for(i in 1:length(ms)) {
           df_a <- df_a %>%
             add_row(Date_a = Date, Location_a = water_body,
-                    Site_a = missing_sites[i], Habscore_a = NA,
+                    Site_a = ms[i], Habscore_a = NA,
                     Notes_a = "Missing image")
         }
 
@@ -369,10 +360,10 @@ sheet_ui <- function() {
         assign(x = 'df_a', value = df_a, envir = .GlobalEnv)
 
       } else if(side == "B") {
-        for(i in 1:length(missing_sites)) {
+        for(i in 1:length(ms)) {
           df_b <- df_b %>%
             add_row(Date_b = Date, Location_b = water_body,
-                    Site_b = missing_sites[i], Habscore_b = NA,
+                    Site_b = ms[i], Habscore_b = NA,
                     Notes_b = "Missing image")
         }
 
@@ -387,8 +378,8 @@ sheet_ui <- function() {
     i <- i + 1
   }
 
-  # Remove missing_sites, side, and sites from the Global Environment
-  rm(missing_sites, side, sites, envir = .GlobalEnv)
+  # Remove ms, side, and s from the Global Environment
+  rm(ms, side, s, envir = .GlobalEnv)
 
   # * Create the metadata sheet
   metadata_builder()
