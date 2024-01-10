@@ -20,3 +20,7 @@ to be analyzed in a format that R can read. For optimal efficiency, copy the
 path to this folder prior to running the function to utilize the default
 setting.
 }
+\examples{
+## Pass a directory path copied from the File Explorer that uses escape keys as the standard folder-subfolder separation.
+camdir(path = "C:\Desktop\GitHub\Oysters\RAP\Data")
+}
