@@ -9,12 +9,6 @@
 
 ################################################################################
 
-##################
-### sites_ui() ###
-##################
-
-################################################################################
-
 ########################
 ### File Description ###
 ########################
@@ -23,15 +17,7 @@
 # Author: Sam McNeely
 # Contributors:
 # Date Created: 11/25/2023
-# Date Modified: 12/08/2023
-
-# Purpose:
-# The purpose of this script is to create a function, sites(), that takes user
-# input through an interface prompted by the function itself. The user input
-# will be site numbers for sites in which a video was recorded and a still image
-# was extracted successfully. This function will create a vector containing the
-# numbers entered by the user. It can be used for both side A and B camera
-# sites.
+# Date Modified: 01/10/2023
 
 # Difference from PhotoRandomizer.R:
 # This script takes user input (in this case, site numbers) and stores it in

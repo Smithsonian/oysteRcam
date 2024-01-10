@@ -11,10 +11,10 @@
 #' most recent item copied to convert the toward an R readable path.
 #'
 #' @return The path to the folder containing the GoPro images.
-
-################
-### camdir() ###
-################
+#'
+#' @examples
+#' ## Pass a directory path copied from the File Explorer that uses escape keys as the standard folder-subfolder separation.
+#' camdir(path = "C:\Desktop\GitHub\Oysters\RAP\Data")
 
 ################################################################################
 
@@ -26,7 +26,7 @@
 # Author: Sam McNeely
 # Contributors:
 # Date Created: 12/20/2023
-# Date Modified: 01/07/2024
+# Date Modified: 01/09/2024
 
 # Purpose:
 # The purpose of this script is to score the images in R and then it will output
@@ -65,11 +65,11 @@ camdir <- function(path = "clipboard") {
 
   while(stop_1 == FALSE) {
 
-    # If path == "clipboard", assign cdir to the copied path which is stored on the
-    # MS Windows Clipboard.
-    cdir <- if(path == "clipboard" & answer == 'Y') {
+    # If path == "clipboard", assign camdir to the copied path which is stored
+    # on the MS Windows Clipboard.
+    camdir <- if(path == "clipboard" & answer == 'Y') {
 
-      # Check which OS is being used: Windows, Mac, or Linux
+      # Check which OS is being used: Windows, Mac
       # Read the clipboard if using Windows
       if(Sys.info()['sysname'] == 'Windows') {
         readClipboard()
@@ -85,7 +85,7 @@ camdir <- function(path = "clipboard") {
     }
 
     # Use chartr() to replace "\\" with "/" so that R does not assume escape keys
-    cdir <- chartr("\\", "/", cdir)
+    camdir <- chartr("\\", "/", camdir)
 
     # * while loop 1.1 [Camera directory path verification]
     # * Have the user input which camera side is being entered with the only
@@ -98,16 +98,16 @@ camdir <- function(path = "clipboard") {
     # "B" is entered
     while(stop_2 == FALSE) {
       # Prompt the user to check that their input is correct
-      answer <- readline(prompt = cat("\n\nThe path to the folder of images is:\n\n", cdir, "\n\nIs this correct? [Y/N]\n", sep = ""))
+      answer <- readline(prompt = cat("\n\nThe path to the folder of images is:\n\n", camdir, "\n\nIs this correct? [Y/N]\n", sep = ""))
 
       # If user input is correct, break the while loops 1 and 1.1 and return
-      # cdir
+      # camdir
       if(answer == "Y") {
         stop_1 <- TRUE
         stop_2 <- TRUE
 
-        # Use assign() to assign cdir to the global environment
-        assign(x = 'cdir', value = cdir, envir = .GlobalEnv)
+        # Use assign() to assign camdir to the global environment
+        assign(x = 'camdir', value = camdir, envir = .GlobalEnv)
 
         # If user input is incorrect, reprompt the user
       } else if(answer == "N") {
