@@ -67,8 +67,8 @@ sites_ui <- function() {
     # while loop
     stop_1.1 <- FALSE
 
-    # create an empty vector, sites, to store all of the site numbers
-    sites <- c()
+    # create an empty vector, s, to store all of the site numbers
+    s <- c()
 
     while(stop_1.1 == FALSE) {
 
@@ -163,8 +163,8 @@ sites_ui <- function() {
                 stop_1.1.1 <- TRUE
                 stop_1.1.1.3 <- TRUE
 
-                # append the consecutive sites to the sites vector
-                sites <- append(sites, as.numeric(first):as.numeric(last))
+                # append the consecutive sites to the s vector
+                s <- append(s, as.numeric(first):as.numeric(last))
 
                 # If user input is incorrect (N), break the current while loop and
                 # reprompt the user
@@ -188,15 +188,13 @@ sites_ui <- function() {
               # site input.
               stop_1.1.1.3 <- TRUE
             }
-
           }
-
         }
 
         # if the user entered Remove, remove the most recent entry from the
         # sites vector
       } else if(input_1 == 'Remove') {
-        sites <- sites[-length(sites)]
+        s <- s[-length(s)]
 
         # add a warning message to ensure the user knows the most recent entry
         # was removed in case it was an accident
@@ -208,9 +206,9 @@ sites_ui <- function() {
       } else if(is.na(as.numeric(input_1)) | (as.numeric(input_1) <= 0) | (as.numeric(input_1) >= 1000) | (!is.wholenumber(as.numeric(input_1)))) {
         cat('\n\nError: invalid entry.\nEntry must be a whole number between 1-999, "End", or "Remove".\n')
 
-        # add n (as a numeric, not a character) to the sites vector
+        # add n (as a numeric, not a character) to the s vector
       } else {
-        sites <- append(sites, as.numeric(input_1))
+        s <- append(s, as.numeric(input_1))
       }
     }
 
@@ -222,7 +220,7 @@ sites_ui <- function() {
 
     while(stop_1.2 == FALSE) {
       cat("\n\nThe sites entered are:\n")
-      cat(sites, sep = ", ")
+      cat(s, sep = ", ")
 
       # Prompt the user to check that their input is correct
       input_3 <- readline(prompt = cat("\n\nIs this correct? [Y/N]\n"))
@@ -233,8 +231,8 @@ sites_ui <- function() {
         stop_1 <- TRUE
         stop_1.2 <- TRUE
 
-        # Use assign() to assign sites to the global environment
-        assign(x = 's', value = sites, envir = .GlobalEnv)
+        # Use assign() to assign s to the global environment
+        assign(x = 's', value = s, envir = .GlobalEnv)
 
         # If user input is incorrect (N), break the current while loop and
         # reprompt the user
