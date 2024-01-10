@@ -67,7 +67,7 @@ camdir <- function(path = "clipboard") {
 
     # If path == "clipboard", assign camdir to the copied path which is stored
     # on the MS Windows Clipboard.
-    camdir <- if(path == "clipboard" & answer == 'Y') {
+    cdir <- if(path == "clipboard" & answer == 'Y') {
 
       # Check which OS is being used: Windows, Mac
       # Read the clipboard if using Windows
@@ -85,7 +85,7 @@ camdir <- function(path = "clipboard") {
     }
 
     # Use chartr() to replace "\\" with "/" so that R does not assume escape keys
-    camdir <- chartr("\\", "/", camdir)
+    cdir <- chartr("\\", "/", cdir)
 
     # * while loop 1.1 [Camera directory path verification]
     # * Have the user input which camera side is being entered with the only
@@ -98,7 +98,7 @@ camdir <- function(path = "clipboard") {
     # "B" is entered
     while(stop_2 == FALSE) {
       # Prompt the user to check that their input is correct
-      answer <- readline(prompt = cat("\n\nThe path to the folder of images is:\n\n", camdir, "\n\nIs this correct? [Y/N]\n", sep = ""))
+      answer <- readline(prompt = cat("\n\nThe path to the folder of images is:\n\n", cdir, "\n\nIs this correct? [Y/N]\n", sep = ""))
 
       # If user input is correct, break the while loops 1 and 1.1 and return
       # camdir
@@ -107,7 +107,7 @@ camdir <- function(path = "clipboard") {
         stop_2 <- TRUE
 
         # Use assign() to assign camdir to the global environment
-        assign(x = 'camdir', value = camdir, envir = .GlobalEnv)
+        assign(x = 'cdir', value = cdir, envir = .GlobalEnv)
 
         # If user input is incorrect, reprompt the user
       } else if(answer == "N") {

@@ -35,7 +35,7 @@
 # Name the function sites()
 sites <- function() {
 
-  filenames <- list.files(camdir)
+  filenames <- list.files(cdir)
 
   sites <- c()
 
