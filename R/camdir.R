@@ -106,8 +106,8 @@ camdir <- function(path = "clipboard") {
         stop_1 <- TRUE
         stop_2 <- TRUE
 
-        # Use assign() to assign camdir to the global environment
-        assign(x = 'cdir', value = cdir, envir = .GlobalEnv)
+        # Try returning cdir
+        return(cdir)
 
         # If user input is incorrect, reprompt the user
       } else if(answer == "N") {

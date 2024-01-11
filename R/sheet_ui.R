@@ -5,9 +5,9 @@
 #' oysteRcam to have the user answers prompted questions that will produce a
 #' datasheet. This datasheet will then be used as the scoring sheet.
 #'
-#' Functions utilized from oysteRcam: waterbody(), sampling_date_ui(),
-#' camside_ui(), sites_ui(), missing_sites_ui(), metadata_builder(), and
-#' datasheet().
+#' Functions utilized from oysteRcam: waterbody_ui(), sampling_date_ui(),
+#' numofsides(), camside_ui(), sites_ui(), missing_sites_ui(),
+#' metadata_builder(), and datasheet().
 #'
 #' @return An excel file.
 
@@ -21,7 +21,7 @@
 # Author: Sam McNeely
 # Contributors:
 # Date Created: 11/27/2023
-# Date Modified: 01/10/2024
+# Date Modified: 01/11/2024
 
 # Place in the data collection process:
 # This R script is meant to be run after images have been extracted from the
@@ -40,82 +40,18 @@
 
 # * Create a function that takes user input to define which camera is being
 # * evaluated first to create the spreadsheet variables.
-# Name the function sheet_ui()
+# Name the function sheet_ui().
 sheet_ui <- function() {
 
-  # call waterbody() to set the sampling site
-  waterbody()
+  # Call waterbody_ui() to set the sampling site location.
+  location <- waterbody_ui()
 
-  # call sampling_date_ui() to set the date sampling occurred
-  sampling_date_ui()
+  # Call sampling_date_ui() to set the date sampling occurred.
+  date <- sampling_date_ui()
 
-  # * Both sides need to be evaluated, so camside_ui(), sites_ui(), and the
-  # * following if-else statement needs to be run twice (once per camera side).
-
-  # * while loop 1 [Camera side amount and verification]
-  # * The stop_1 variable and its corresponding while loop are reassurances that
-  # * the user input the correct entry. This variable is the flag that tells the
-  # * while loop to either continue or stop running.
-  stop_1 <- FALSE
-
-  while(stop_1 == FALSE) {
-
-    # * while loop 1.1 [Camera side amount]
-    # * Have the user input how many camera sides are being entered with the
-    # * options being 1 or 2
-    # stop_1.1 is the flag for when the user entry is valid, exit the current
-    # while loop
-    stop_1.1 <- FALSE
-
-    # use a while loop to prompt for user input until a specific entry 1 or 2 is
-    # entered
-    while(stop_1.1 == FALSE) {
-      # Prompt the user for the number of sides to be analyzed
-      n <- readline(prompt = cat("\n\nHow many sides are being analyzed? [1/2]\n"))
-
-      # if the entry is a 1 or 2, then exit the current while loop.
-      if(n == '1' | n == '2') {
-        stop_1.1 <- TRUE
-
-        # if the entry is not a 1 or 2, then print an error message and reprompt.
-        # if the entry is a 1 or 2, then exit the current while loop.
-      } else {
-        cat('\n\nError: invalid entry.\nEnter "1" or "2".\n')
-      }
-    }
-
-    # * while loop 1.2 [Camera side amount verification]
-    # * Have the user answer if the current amount of sides to be analyzed is
-    # * correct.
-    # stop_1.2 is the flag for when the user entry is valid, exit the current
-    # while loop
-    stop_1.2 <- FALSE
-
-    # use a while loop to prompt for user input until a specific entry "Y" or
-    # "N" is entered
-    while(stop_1.2 == FALSE) {
-      # ask the user if the number of camera sides is correct
-      side_answer <- readline(prompt = cat("\n\nYou are analyzing ", n, " sides. Is that correct? [Y/N]\n", sep = ""))
-
-        # if the entry is "N", set stop_1.2 = TRUE to exit the current while loop,
-        # but by keeping stop_1 = FALSE, the main while loop is rerun.
-      if(side_answer == "N") {
-        stop_1.2 <- TRUE
-        cat('\n\nNumber of sides to be analyzed is incorrect. Reprompting...\n')
-
-        # if the entry is "Y", set stop_1.2 = TRUE to exit the current while loop
-        # and stop_1 = TRUE to exit the main while loop.
-      } else if(side_answer == "Y") {
-        stop_1 <- TRUE
-        stop_1.2 <- TRUE
-
-        # if the entry is not a "Y" or "N", then print an error message and
-        # reprompt.
-      } else {
-        cat('\n\nError: invalid entry.\nEnter "Y" for Yes or "N" for No.\n')
-      }
-    }
-  }
+  # Call numofsides_ui() to set how many camera sides need to be analyzed in the
+  # following iterative loop.
+  numsides <- numofsides_ui()
 
   # * while loop 2 [Variable assignment]
   # * The i counter variable and its corresponding while loop are in place to
@@ -125,33 +61,34 @@ sheet_ui <- function() {
   # create a counter variable, i, initialized at 0
   i <- 0
 
-  # use a while loop so that the user is prompted all sides have been accounted
-  # for
-  while(i != n) {
+  # Use a while loop so that the user is prompted all sides have been accounted
+  # for.
+  while(i != numsides) {
 
-    # call camside_ui() to determine which side is being evaluated
-    camside_ui()
+    # Call camside_ui() to determine which side is being prepared for analysis.
+    side <- camside_ui()
 
-    # call sites_ui() to gather the site number information from this specific side
-    sites_ui() # the vector needed for the next step is sites
+    # Call sites_ui() to gather the site number information from this specific
+    # side.
+    site <- sites_ui()
 
-    # * Define parameters for this specific camera side
+    # * Define parameters for this specific camera side.
     # Parameters: Date_a/b, Location_a/b, Random_Assignment_a/b, and Notes_a/b
 
     # create an if-statement for if side equals "A" or "B" to define the variable
     # names
     if(side == "A") {
-      Date_a <- rep(date, length(s))
-      Location_a <- rep(water_body, length(s))
-      Site_a <- s
-      Random_Assignment_a <- sample(1:length(s), length(s))
-      Notes_a <- rep("", length(s))
+      Date_a <- rep(date, length(site))
+      Location_a <- rep(water_body, length(site))
+      Site_a <- site
+      Random_Assignment_a <- sample(1:length(site), length(site))
+      Notes_a <- rep("", length(site))
     } else if(side == "B") {
-      Date_b <- rep(date, length(s))
-      Location_b <- rep(water_body, length(s))
-      Site_b <- s
-      Random_Assignment_b <- sample(1:length(s), length(s))
-      Notes_b <- rep("", length(s))
+      Date_b <- rep(date, length(site))
+      Location_b <- rep(water_body, length(site))
+      Site_b <- site
+      Random_Assignment_b <- sample(1:length(sites), length(site))
+      Notes_b <- rep("", length(site))
     }
 
     # * Determine if Habitat Score should be added to the datasheet
@@ -163,11 +100,11 @@ sheet_ui <- function() {
 
         # if side == "A", define Habscore_a as an empty vector
         if(side == "A") {
-          Habscore_a <- rep(NA, length(s))
+          Habscore_a <- rep(NA, length(site))
 
           # if side == "B", define Habscore_b as an empty vector
         } else if(side == "B") {
-          Habscore_b <- rep(NA, length(s))
+          Habscore_b <- rep(NA, length(site))
         }
       } # If hab_answer = "N", nothing needs to be done
 
@@ -203,11 +140,11 @@ sheet_ui <- function() {
 
           # if side == "A", define Habscore_a as an empty vector
           if(side == "A") {
-            Habscore_a <- rep(NA, length(s))
+            Habscore_a <- rep(NA, length(site))
 
             # if side == "B", define Habscore_b as an empty vector
           } else if(side == "B") {
-            Habscore_b <- rep(NA, length(s))
+            Habscore_b <- rep(NA, length(site))
           }
 
           # if the entry is not "Y" nor "N", then print an error message and
@@ -227,11 +164,11 @@ sheet_ui <- function() {
 
         # if side == "A", define Percent_Cover_a as an empty vector
         if(side == "A") {
-          Percent_Cover_a <- rep(NA, length(s))
+          Percent_Cover_a <- rep(NA, length(site))
 
           # if side == "B", define Percent_Cover_b as an empty vector
         } else if(side == "B") {
-          Percent_Cover_b <- rep(NA, length(s))
+          Percent_Cover_b <- rep(NA, length(site))
         }
       } # If pc_answer = "N", nothing needs to be done
 
@@ -267,11 +204,11 @@ sheet_ui <- function() {
 
           # if side == "A", define Percent_Cover_a as an empty vector
           if(side == "A") {
-            Percent_Cover_a <- rep(NA, length(s))
+            Percent_Cover_a <- rep(NA, length(site))
 
             # If side == "B", define Percent_Cover_b as an empty vector
           } else if(side == "B") {
-            Percent_Cover_b <- rep(NA, length(s))
+            Percent_Cover_b <- rep(NA, length(site))
           }
 
           # if the entry is not "Y" nor "N", then print an error message and
@@ -340,19 +277,19 @@ sheet_ui <- function() {
     }
 
     # * Add in rows for the sites with missing images.
-    # call missing_sites_ui() to gather the site number information from this
-    # specific side in which images were not extracted for said site
-    missing_sites_ui() # the vector needed for the next step is missing_sites
+    # Call missing_sites_ui() to gather the site number information from this
+    # specific side in which images were not extracted for said site.
+    missing_sites <- missing_sites_ui()
 
     # append the dataframe with rows for missing images
-    if(length(ms) >= 1) {
+    if(length(missing_sites) >= 1) {
 
       # append the correct dataframe: df_a or df_b
       if(side == "A") {
-        for(i in 1:length(ms)) {
+        for(i in 1:length(missing_sites)) {
           df_a <- df_a %>%
             add_row(Date_a = Date, Location_a = water_body,
-                    Site_a = ms[i], Habscore_a = NA,
+                    Site_a = missing_sites[i], Habscore_a = NA,
                     Notes_a = "Missing image")
         }
 
@@ -360,10 +297,10 @@ sheet_ui <- function() {
         assign(x = 'df_a', value = df_a, envir = .GlobalEnv)
 
       } else if(side == "B") {
-        for(i in 1:length(ms)) {
+        for(i in 1:length(missing_sites)) {
           df_b <- df_b %>%
             add_row(Date_b = Date, Location_b = water_body,
-                    Site_b = ms[i], Habscore_b = NA,
+                    Site_b = missing_sites[i], Habscore_b = NA,
                     Notes_b = "Missing image")
         }
 
@@ -378,8 +315,8 @@ sheet_ui <- function() {
     i <- i + 1
   }
 
-  # Remove ms, side, and s from the Global Environment
-  rm(ms, side, s, envir = .GlobalEnv)
+  # Remove ms, side, and site from the Global Environment
+  rm(missing_sites, side, site, envir = .GlobalEnv)
 
   # * Create the metadata sheet
   metadata_builder()
