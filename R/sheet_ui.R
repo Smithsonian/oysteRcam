@@ -141,7 +141,7 @@ sheet_ui <- function() {
     # create an if-statement for if side equals "A" or "B" to define the variable
     # names
     if(side == "A") {
-      Date_a <- rep(date, length(s), envir = .GlobalEnv)
+      Date_a <- rep(date, length(s))
       Location_a <- rep(water_body, length(s))
       Site_a <- s
       Random_Assignment_a <- sample(1:length(s), length(s))
